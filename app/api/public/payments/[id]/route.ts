@@ -1,0 +1,3 @@
+import { db } from '@/lib/firebase-admin';
+export const runtime='nodejs';
+export async function GET(_:Request,{params}:{params:Promise<{id:string}>}){try{const {id}=await params;const s=await db().collection('payments').doc(id).get();if(!s.exists)return Response.json({error:'Payment request not found'},{status:404});const d=s.data()!;if(['paid','cancelled','setup_failed'].includes(d.status))return Response.json({id:s.id,status:d.status,amount:d.amount,currency:d.currency,description:d.description,provider:d.provider});return Response.json({id:s.id,status:d.status,amount:d.amount,currency:d.currency,description:d.description,provider:d.provider});}catch{return Response.json({error:'Unable to load payment'},{status:500});}}
