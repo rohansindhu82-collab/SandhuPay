@@ -10,6 +10,7 @@ export async function requireMerchant(req: NextRequest) {
   return decoded;
 }
 export function jsonError(error: unknown) {
+  console.error('[SandhuPay API error]', error);
   const message = error instanceof Error ? error.message : 'Unexpected error';
   const status = message === 'UNAUTHORIZED' ? 401 : message === 'FORBIDDEN' ? 403 : 400;
   return Response.json({ error: status === 400 ? 'Request failed' : message }, { status });
